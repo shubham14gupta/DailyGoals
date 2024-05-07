@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoList Reprise</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <div class="selection-container">
+        <div class="controls">
+            <label for="viewMode">View Mode:</label>
+            <select name="dateLevel" id="dateLevelSelector" value ="<%= currentSelection %>" >
+                <option value="date">Date</option>
+                <option value="week">Week</option>
+                <option value="month">Month</option>
+                <option value="year">Year</option>
+            </select>
+        </div>
+        <form id="dateParams" action="/updateSelection" method="post">
+            <input type="text" name="selection" hidden="true">
+            <input type="text" name="date" hidden="true">
+            <input type="text" name="week" hidden="true">
+            <input type="text" name="month" hidden="true">
+            <input type="text" name="year" hidden="true">
+        </form>
+        <div>
+            <button class="btn" id="backward"><</button>
+            <button class="btn" id="reset">Current Date</button>
+            <button class="btn" id="forward">></button>
+        </div>
+        <div>
+            <p id="selectedDate"></p>
+        </div>
+    </div>
+    <div class="container">
+        <h1>To Do List</h1>
+        <div class="list">
+            <% itemList.forEach(item=> { %>
+                <div class="item" id="div-<%= item.id %>" value="<%= item.id %>">
+                    <form action="/strikeThrough" method="post" class="strikeThroughForm"
+                        id="strikeThroughForm-<%= item.id %>">
+                        <p class="itemText 
+                        <%= item.done ? 'strikthrough' : '' %>" id="itemText-<%=item.id%>" value="<%= item.id %>">
+                            <%= item.item %>
+                        </p>
+                        <input hidden="true" type="text" name="itemId" id="" value="<%= item.id %>">
+                        <input hidden="true" type="text" name="itemDone" id="" value="<%= !item.done %>">
+
+                    </form>
+                    <button class="b-edit hidden" id="b-edit-<%= item.id %>" value="<%= item.id %>">✎</button>
+                    <button class="b-del hidden" id="b-del-<%= item.id %>">Del</button>
+                    <form action="/edit" method="post" id="form-<%= item.id %>">
+                        <input type="text" hidden="true" name="editedText" placeholder="<%= item.item %>"
+                            value="<%= item.item %>" id="text-<%= item.id %>">
+                        <button id="b-done-<%= item.id %>" name='id' value=<%=item.id %> hidden="true">Done</button>
+                    </form>
+                </div>
+
+                <% }) %>
+
+                    <br>
+
+                    <button type="button" id="addButton"> + </button>
+                    <br>
+                    <form action="/add" method="post">
+                        <input type="text" hidden="true" name="newItem" id="newItemText" placeholder="To Do Item"
+                            autocomplete="off" autofocus="true">
+                        <button type="submit" hidden="true" id="newItemButton">Done</button>
+                    </form>
+
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
