@@ -25,11 +25,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var itemList = [];
 var level = 'date';
 var selectedDate = new Date();
+var selectedWeek = current_week(selectedDate); 
+var selectedMonth = selectedDate.getMonth();  
 var selectedYear = selectedDate.getFullYear();
 var id_currentDate;
 
-app.get("/", async (req, res) => {
 
+function current_week(date) {
+  const d = date;
+  let yearStart = +new Date(d.getFullYear(), 0, 1);
+  let today = +new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  let dayOfYear = ((today - yearStart + 1) / 86400000);
+  let week = Math.ceil(dayOfYear / 7);
+  return week;
+}
+
+app.get("/", async (req, res) => {
   let results_date;
   let results_insert;
   try {
@@ -49,26 +60,26 @@ app.get("/", async (req, res) => {
         break;
 
       case "week":
-        results_date = await db.query("select id from weeks where week = $1 and year = $2", [selectedDate, selectedYear]);
+        results_date = await db.query("select id from weeks where week = $1 and year = $2", [selectedWeek, selectedYear]);
         if (results_date.rows.length === 0) {
-          results_insert = await db.query("insert into weeks (week, year) values ($1, $2)", [selectedDate, selectedYear]);
-          results_date = await db.query("select id from weeks where week = $1 and year = $2", [selectedDate, selectedYear]);
+          results_insert = await db.query("insert into weeks (week, year) values ($1, $2)", [selectedWeek, selectedYear]);
+          results_date = await db.query("select id from weeks where week = $1 and year = $2", [selectedWeek, selectedYear]);
         }
         break;
 
       case "month":
-        results_date = await db.query("select id from months where month = $1 and year = $2", [selectedDate, selectedYear]);
+        results_date = await db.query("select id from months where month = $1 and year = $2", [selectedMonth, selectedYear]);
         if (results_date.rows.length === 0) {
-          results_insert = await db.query("insert into months (month, year) values ($1, $2)", [selectedDate, selectedYear]);
-          results_date = await db.query("select id from months where month = $1 and year = $2", [selectedDate, selectedYear]);
+          results_insert = await db.query("insert into months (month, year) values ($1, $2)", [selectedMonth, selectedYear]);
+          results_date = await db.query("select id from months where month = $1 and year = $2", [selectedMonth, selectedYear]);
         }
         break;
 
       case "year":
-        results_date = await db.query("select id from years where year = $1 ", [selectedDate]);
+        results_date = await db.query("select id from years where year = $1 ", [selectedYear]);
         if (results_date.rows.length === 0) {
-          results_insert = await db.query("insert into years (year) values ($1)", [selectedDate]);
-          results_date = await db.query("select id from years where year = $1", [selectedDate]);
+          results_insert = await db.query("insert into years (year) values ($1)", [selectedYear]);
+          results_date = await db.query("select id from years where year = $1", [selectedYear]);
         }
         break;
 
@@ -86,7 +97,13 @@ app.get("/", async (req, res) => {
   const results = await db.query("select * from items  where level = $1 and fk = $2 order by id", [level, id_currentDate]);
   itemList = results.rows;
 
-  res.render('index.ejs', { itemList: itemList, currentSelection: level });
+  res.render('index.ejs', { itemList: itemList,
+                           currentSelection: level, 
+                           currentDate:selectedDate, 
+                           currentWeek: selectedWeek,
+                           currentMonth: selectedMonth, 
+                           currentYear: selectedYear
+  });
 
 })
 
@@ -103,7 +120,7 @@ app.post("/add", async (req, res) => {
 
 })
 
-
+// Handling edit request
 app.post("/edit", async (req, res) => {
   const item = req.body.editedText;
   const id = req.body.id;
@@ -116,6 +133,18 @@ app.post("/edit", async (req, res) => {
   res.redirect("/");
 })
 
+// handling delete request
+app.post("/delete", async (req, res) => {
+  const id = req.body.deletedItemId; 
+  try {
+    const results = await db.query("delete from items where id = $1", [id])
+  } catch (error) {
+    console.log(error);
+  }
+  res.redirect("/"); 
+})
+
+// Handling item completed request
 app.post("/strikeThrough", async (req, res) => {
   const id = req.body.itemId;
   const done = req.body.itemDone;
@@ -127,6 +156,7 @@ app.post("/strikeThrough", async (req, res) => {
   res.redirect("/");
 })
 
+// Handling request when Level is switched between daily/weekly/monthly/yearly level
 app.post("/updateSelection", async (req, res) => {
   level = req.body.selection;
   switch (level) {
@@ -135,17 +165,17 @@ app.post("/updateSelection", async (req, res) => {
       break;
 
     case "week":
-      selectedDate = req.body.week;
+      selectedWeek = req.body.week;
       selectedYear = req.body.year;
       break;
 
     case "month":
-      selectedDate = req.body.month;
+      selectedMonth = req.body.month;
       selectedYear = req.body.year;
       break;
 
     case "year":
-      selectedDate = req.body.year;
+      selectedYear = req.body.year;
       break;
 
     default:

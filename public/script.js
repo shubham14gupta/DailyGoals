@@ -1,43 +1,43 @@
-let log = console.log; 
+let log = console.log;
 
-$(".item").on("mouseenter", function() {
+$(".item").on("mouseenter", function () {
     // $("h1").css("color", 'purple');
     let selectedId = $(this).attr('value');
     log(selectedId);
-    $("#b-edit-" + selectedId).removeClass("hidden"); 
-    $("#b-del-" + selectedId).removeClass("hidden"); 
-}); 
+    $("#b-edit-" + selectedId).removeClass("hidden");
+    $("#b-del-" + selectedId).removeClass("hidden");
+});
 
 
-$(".item").on("mouseleave", function() {
+$(".item").on("mouseleave", function () {
     // $("h1").css("color", 'purple');
     let selectedId = $(this).attr('value');
     log(selectedId);
-    $("#b-edit-" + selectedId).addClass("hidden"); 
-    $("#b-del-" + selectedId).addClass("hidden"); 
-}); 
+    $("#b-edit-" + selectedId).addClass("hidden");
+    $("#b-del-" + selectedId).addClass("hidden");
+});
 
-$(".b-edit").on('click', function() {
+$(".b-edit").on('click', function () {
     let selectedId = $(this).attr('value');
     log(selectedId);
-    $("#b-done-" + selectedId).attr('hidden', false); 
-    $("#text-" + selectedId).attr('hidden', false); 
-    $("#b-edit-" + selectedId).attr('hidden', true); 
-    $("#b-del-" + selectedId).attr('hidden', true); 
-    $("#itemText-" + selectedId).text(""); 
+    $("#b-done-" + selectedId).attr('hidden', false);
+    $("#text-" + selectedId).attr('hidden', false);
+    $("#b-edit-" + selectedId).attr('hidden', true);
+    $("#b-del-" + selectedId).attr('hidden', true);
+    $("#itemText-" + selectedId).text("");
 })
 
-$("#addButton").on('click', function() {
-    $("#newItemText").attr('hidden', false); 
-    $("#newItemButton").attr('hidden', false); 
-    $("#addButton").attr('hidden', true); 
+$("#addButton").on('click', function () {
+    $("#newItemText").attr('hidden', false);
+    $("#newItemButton").attr('hidden', false);
+    $("#addButton").attr('hidden', true);
 })
 
 
-$(".itemText").on('dblclick', function() {
+$(".itemText").on('dblclick', function () {
     let selectedId = $(this).attr('value');
     log("hello" + selectedId);
-    $("#strikeThroughForm-" + selectedId).submit(); 
+    $("#strikeThroughForm-" + selectedId).submit();
     $("#itemText-" + selectedId).toggleClass("strikthrough")
 
 })
@@ -47,37 +47,41 @@ $(".itemText").on('dblclick', function() {
 let dateLevelSelector = $("#dateLevelSelector");
 let forwardButton = $("#forward");
 let backwardButton = $("#backward");
-let dateParams = document.querySelector("#dateParams"); 
+let dateParams = document.querySelector("#dateParams");
 
 var currentSelection = dateLevelSelector.attr('value');
-document.querySelector('#dateLevelSelector').value = currentSelection; 
+document.querySelector('#dateLevelSelector').value = currentSelection;
 
-var currentDate; 
-var currentWeek; 
-var currentMonth; 
-var currentYear; 
+var currentDate;
+var currentWeek;
+var currentMonth;
+var currentYear;
 
-function setCurrentDate (){    
-     currentDate = new Date();
-     currentWeek = current_week();
-     currentMonth = currentDate.getMonth();
-     currentYear = currentDate.getFullYear();
+var currentDateStr = $("#currentDate").attr('value');
+currentDate = currentDateStr.replace(" GMT", "").replace("GMT", "").replace("GMT", "").replace("GMT", "") + "-05:00";
+currentDate = new Date(currentDate); 
+currentWeek = parseInt($("#currentWeek").attr('value'));
+currentMonth = parseInt($("#currentMonth").attr('value'));
+currentYear = parseInt($("#currentYear").attr('value'));
+
+
+function resetDate(){
+    currentDate = new Date(); 
+    currentWeek = current_week();
+    currentMonth = currentDate.getMonth();
+    currentYear = currentDate.getFullYear();
 }
 
-function submitDateParamsForm(){
-    dateParams.elements['selection'].value = currentSelection; 
-    dateParams.elements['date'].value = currentDate; 
-    dateParams.elements['week'].value = currentWeek; 
-    dateParams.elements['month'].value = currentMonth; 
-    dateParams.elements['year'].value = currentYear; 
-    dateParams.submit(); 
+function submitDateParamsForm() {
+    dateParams.elements['selection'].value = currentSelection;
+    dateParams.elements['date'].value = currentDate;
+    dateParams.elements['week'].value = currentWeek;
+    dateParams.elements['month'].value = currentMonth;
+    dateParams.elements['year'].value = currentYear;
+    dateParams.submit();
 }
 
-setCurrentDate(); 
-
-$("h1").css('color', 'purple'); 
-
-
+// setCurrentDate();
 
 var months = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
@@ -88,31 +92,31 @@ dateLevelSelector.change(function () {
     currentSelection = $(this).val();
     log(currentSelection);
     getCurrentDate();
-    submitDateParamsForm(); 
+    submitDateParamsForm();
 });
 
 $('.btn').click(function () {
     var clickedButton = $(this).attr('id');
-    if(clickedButton==='reset'){
-        setCurrentDate(); 
+    if (clickedButton === 'reset') {
+        resetDate();
     }
-    else{
+    else {
         if (clickedButton === 'forward') {
             direction = +1;
-        } else if(clickedButton==='backward'){
+        } else if (clickedButton === 'backward') {
             (direction = -1);
-        } 
+        }
         switch (currentSelection) {
             case "date":
                 currentDate.setDate(currentDate.getDate() + direction);
                 break;
             case "week":
                 currentWeek += direction;
-                if (currentWeek <0){
-                    currentWeek = 0; 
+                if (currentWeek < 0) {
+                    currentWeek = 0;
                 }
-                if (currentWeek >=52){
-                    currentWeek=52;
+                if (currentWeek >= 52) {
+                    currentWeek = 52;
                 }
                 break;
             case "month":
@@ -124,22 +128,22 @@ $('.btn').click(function () {
             case "year":
                 currentYear += direction;
                 break;
-    
+
             default:
                 break;
         }
     }
-    
+
     getCurrentDate();
-    submitDateParamsForm(); 
+    submitDateParamsForm();
 })
 
 
 function getCurrentDate() {
-    let date = currentDate.toDateString();
+    
     switch (currentSelection) {
         case 'date':
-            date = currentDate.toDateString();
+            date = new Date(currentDate).toDateString(); 
             break;
 
         case 'week':
@@ -157,7 +161,7 @@ function getCurrentDate() {
         default:
             break;
     }
-    $('#selectedDate').text(date);
+    $('#selectedDate').text(date); 
 }
 
 function current_week() {

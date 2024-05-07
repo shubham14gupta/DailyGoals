@@ -5,12 +5,6 @@ body{
     justify-content: center;
 }
 
-.selection-container{
-    background-color: white;
-    border-radius: 8px;
-    width: 20%;
-    padding: 40px;
-}
 .container{
     background-color: white;
     border-radius: 8px;
@@ -18,60 +12,10 @@ body{
     padding: 40px;
 }
 
-h1{
+h1, h2, .control-buttons{
     text-align: center;
 }
 
-ul{
-    list-style-type: none;
-}
-
-.ellipsis-button{
-    border: none;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Style for ellipsis button */
-.ellipsis-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-/* Style for dropdown content */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-/* Style for dropdown content links */
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/* Style for dropdown content links on hover */
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-/* Show dropdown content when the ellipsis button is clicked */
-.dropdown.active .dropdown-content {
-    display: block;
-}
 
 .item p{
     display: inline-block; 
@@ -88,4 +32,13 @@ p, form{
 
 .strikthrough{
     text-decoration: line-through;
+}
+
+.controls{
+    text-align: right;
+}
+
+.item p{
+    font-size: large;
+    font-style: italic;
 }

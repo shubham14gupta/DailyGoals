@@ -6,19 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoList Reprise</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 
 <body>
-    <div class="selection-container">
-        <div class="controls">
-            <label for="viewMode">View Mode:</label>
-            <select name="dateLevel" id="dateLevelSelector" value ="<%= currentSelection %>" >
-                <option value="date">Date</option>
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-                <option value="year">Year</option>
-            </select>
-        </div>
+    <div class="container">
+
+        <h1>To Do List</h1>
+
         <form id="dateParams" action="/updateSelection" method="post">
             <input type="text" name="selection" hidden="true">
             <input type="text" name="date" hidden="true">
@@ -27,16 +23,13 @@
             <input type="text" name="year" hidden="true">
         </form>
         <div>
-            <button class="btn" id="backward"><</button>
-            <button class="btn" id="reset">Current Date</button>
-            <button class="btn" id="forward">></button>
+            <h2 id="selectedDate"></h2>
+            <div class="control-buttons">
+                <button class="btn" id="backward"><</button>
+                <button class="btn" id="forward">></button>
+            </div>
+            
         </div>
-        <div>
-            <p id="selectedDate"></p>
-        </div>
-    </div>
-    <div class="container">
-        <h1>To Do List</h1>
         <div class="list">
             <% itemList.forEach(item=> { %>
                 <div class="item" id="div-<%= item.id %>" value="<%= item.id %>">
@@ -50,12 +43,23 @@
                         <input hidden="true" type="text" name="itemDone" id="" value="<%= !item.done %>">
 
                     </form>
+
+                    <!-- control button: Edit and Delete-->
                     <button class="b-edit hidden" id="b-edit-<%= item.id %>" value="<%= item.id %>">✎</button>
-                    <button class="b-del hidden" id="b-del-<%= item.id %>">Del</button>
+
+                    <!-- Form when edit button is clicke -->
                     <form action="/edit" method="post" id="form-<%= item.id %>">
                         <input type="text" hidden="true" name="editedText" placeholder="<%= item.item %>"
                             value="<%= item.item %>" id="text-<%= item.id %>">
                         <button id="b-done-<%= item.id %>" name='id' value=<%=item.id %> hidden="true">Done</button>
+                    </form>
+
+                    <!-- Delete button -->
+                    <form action="/delete" method="post" id="form-del-<%= item.id %>">
+                        <input type="text" hidden="true" name="deletedItemId" 
+                            value="<%= item.id %>">
+                            <button class="b-del hidden" id="b-del-<%= item.id %>" value="<%= item.id %>"><i
+                                class="fas fa-trash-alt"></i></button>
                     </form>
                 </div>
 
@@ -71,6 +75,26 @@
                         <button type="submit" hidden="true" id="newItemButton">Done</button>
                     </form>
 
+        </div>
+        <div class="controls">
+            <div>
+                <label for="viewMode">View Mode:</label>
+                <input type="text" name="currentDate" id="currentDate" hidden="true" value ="<%= currentDate %>">
+                <input type="text" name="currentWeek" id="currentWeek" hidden="true" value ="<%= currentWeek %>">
+                <input type="text" name="currentMonth" id="currentMonth" hidden="true" value ="<%= currentMonth %>">
+                <input type="text" name="currentYear" id="currentYear" hidden="true" value ="<%= currentYear %>">
+                <select name="dateLevel" id="dateLevelSelector" value="<%= currentSelection %>">
+                    <option value="date">Date</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
+                </select>
+            </div>
+            <div>
+                
+                <button class="btn" id="reset">Current Date</button>
+                
+            </div>
         </div>
     </div>
 
