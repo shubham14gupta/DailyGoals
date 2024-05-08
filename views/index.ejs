@@ -47,9 +47,9 @@
                     <!-- control button: Edit and Delete-->
                     <button class="b-edit hidden" id="b-edit-<%= item.id %>" value="<%= item.id %>">✎</button>
 
-                    <!-- Form when edit button is clicke -->
+                    <!-- Form when edit button is clicked -->
                     <form action="/edit" method="post" id="form-<%= item.id %>">
-                        <input type="text" hidden="true" name="editedText" placeholder="<%= item.item %>"
+                        <input type="text" class="input-box" hidden="true" name="editedText" placeholder="<%= item.item %>"
                             value="<%= item.item %>" id="text-<%= item.id %>">
                         <button id="b-done-<%= item.id %>" name='id' value=<%=item.id %> hidden="true">Done</button>
                     </form>
