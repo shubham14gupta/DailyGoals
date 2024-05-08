@@ -94,7 +94,7 @@ app.get("/", async (req, res) => {
   }
 
   id_currentDate = results_date.rows[0].id;
-  const results = await db.query("select * from items  where level = $1 and fk = $2 order by id", [level, id_currentDate]);
+  const results = await db.query("select * from items  where level = $1 and fk = $2 order by done, id", [level, id_currentDate]);
   itemList = results.rows;
 
   res.render('index.ejs', { itemList: itemList,

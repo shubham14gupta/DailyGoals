@@ -42,3 +42,13 @@ p, form{
     font-size: large;
     font-style: italic;
 }
+
+.b-edit, .b-del{
+    border: none;
+    background-color: white;
+}
+
+.list p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
