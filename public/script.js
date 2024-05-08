@@ -172,3 +172,5 @@ function current_week() {
     let week = Math.ceil(dayOfYear / 7);
     return week;
 }
+
+$("#backward").after($("#selectedDate")); 

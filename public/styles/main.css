@@ -25,10 +25,23 @@ h1, h2, .control-buttons{
     visibility: hidden;
 }
 
-p, form{
+p, form, #selectedDate{
     display: inline;
 }
 
+#selectedDate, #backward, #forward{
+    border: none;
+    margin-bottom: 20px; 
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: white;
+}
+
+
+#backward, #forward{
+    font-size: large;
+    font-weight: bolder;
+}
 
 .strikthrough{
     text-decoration: line-through;
