@@ -31,6 +31,7 @@ $("#addButton").on('click', function () {
     $("#newItemText").attr('hidden', false);
     $("#newItemButton").attr('hidden', false);
     $("#addButton").attr('hidden', true);
+    $("#newItemText").focus(); 
 })
 
 
@@ -174,3 +175,10 @@ function current_week() {
 }
 
 $("#backward").after($("#selectedDate")); 
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Select the button by its ID
+    var button = document.getElementById('addButton');
+
+    button.focus(); 
+});
